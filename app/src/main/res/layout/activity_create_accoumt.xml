@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:text="Creer un compte"
+        android:textStyle="bold"
+        android:textSize="28sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="Pseudo"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Type somethig"
+        android:layout_marginStart="40dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/radius"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="Email"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="acde@xyz.com"
+        android:layout_marginStart="40dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/radius"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="Mot de passe"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Type somethig"
+        android:layout_marginStart="40dp"
+        android:background="@drawable/radius"
+        android:paddingEnd="10dp"
+        android:drawableRight="@drawable/eye"
+        android:layout_marginBottom="30dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="Mot de passe"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Type somethig"
+        android:layout_marginStart="40dp"
+        android:background="@drawable/radius"
+        android:paddingEnd="10dp"
+        android:drawableRight="@drawable/eye"
+        />
+    <Button
+        android:background="@drawable/radius"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
+        android:text="Se commecter "/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:text="Vous avez deja un compte?"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:text="Se connecter"
+            android:textStyle="bold"
+            android:textColor="#706CFA"
+            android:textSize="16sp"/>
+    </LinearLayout>
+</LinearLayout>
