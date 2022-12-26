@@ -40,4 +40,22 @@
         android:paddingEnd="10dp"
         android:drawableRight="@drawable/eye"
         />
+    <Button
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/radius"
+        android:backgroundTint="@color/black"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
+        android:text="Se commecter "/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="193dp"
+        android:layout_marginTop="20dp"
+        android:text="Mot de passe oulie?"
+        android:textStyle="bold"
+        android:textColor="#706CFA"
+        android:textSize="18sp"/>
+
 </LinearLayout>
