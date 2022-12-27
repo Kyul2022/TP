@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:hint="Type somethig"
         android:layout_marginStart="40dp"
+        android:id="@+id/pseudo"
         android:paddingEnd="10dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/radius"
@@ -44,6 +45,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="acde@xyz.com"
+        android:id="@+id/mail"
         android:layout_marginStart="40dp"
         android:paddingEnd="10dp"
         android:layout_marginBottom="20dp"
@@ -63,6 +65,7 @@
         android:layout_height="wrap_content"
         android:hint="Type somethig"
         android:layout_marginStart="40dp"
+        android:id="@+id/pwd"
         android:background="@drawable/radius"
         android:paddingEnd="10dp"
         android:drawableRight="@drawable/eye"
@@ -90,6 +93,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:id="@+id/ok"
         android:layout_marginStart="40dp"
         android:text="Se commecter "/>
     <LinearLayout

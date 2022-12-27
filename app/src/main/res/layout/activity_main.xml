@@ -119,6 +119,7 @@
             android:layout_marginBottom="20dp"
             android:text="Creez um compte"
             android:textStyle="bold"
+            android:id="@+id/create"
             android:textColor="#706CFA"
             android:textSize="14sp"/>
 </LinearLayout>
