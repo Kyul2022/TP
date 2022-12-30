@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +35,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class CreateAccoumt extends AppCompatActivity {
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final int RC_IMAGE_PERMS = 100;
+    private Uri uriImageSelected;
     private static final int RC_CHOOSE_PHOTO = 200;
     EditText pseudo, mail, pwd=null;
     String ps, email,password;
@@ -107,7 +110,7 @@ public class CreateAccoumt extends AppCompatActivity {
 
     // UploadImage method
     private void uploadImage() {
-        String filePath = "p.png";
+        Uri filePath =  this.uriImageSelected;
         if (filePath != null) {
 
             // Code for showing progressDialog while uploading
@@ -125,7 +128,7 @@ public class CreateAccoumt extends AppCompatActivity {
 
             // adding listeners on upload
             // or failure of image
-            ref.putFile(Uri.parse(filePath))
+            ref.putFile(filePath)
                     .addOnSuccessListener(
                             new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
@@ -173,7 +176,27 @@ public class CreateAccoumt extends AppCompatActivity {
                 return;
             }
             Toast.makeText(this, "Vous avez le droit d'accéder aux images !", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, RC_CHOOSE_PHOTO);
         }
 
+    private void handleResponse(int requestCode, int resultCode, Intent data){
+        if (requestCode == RC_CHOOSE_PHOTO) {
+            if (resultCode == RESULT_OK) { //SUCCESS
+                this.uriImageSelected = data.getData();
+            } else {
+                Toast.makeText(this, "pas marche", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        this.handleResponse(requestCode, resultCode, data);
+    }
+
+    }
+
+
+
 
