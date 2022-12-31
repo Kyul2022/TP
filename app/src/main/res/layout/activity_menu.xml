@@ -12,12 +12,15 @@
         android:layout_marginBottom="20dp"
         android:textSize="30sp"
         android:layout_gravity="center_horizontal"/>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+   <Button
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Click Here!"
+       android:layout_gravity="center_horizontal"
+       android:id="@+id/click"
+       />
         <ListView
             android:layout_width="match_parent"
             android:id="@+id/listview"
             android:layout_height="match_parent"/>
-    </ScrollView>
 </LinearLayout>

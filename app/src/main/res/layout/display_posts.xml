@@ -44,10 +44,12 @@
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
+        android:id="@+id/post_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"
+        android:textColor="@color/teal_200"
         android:layout_marginRight="20dp"
         android:text="Visite des etudiants de de Sup'ptic a l'institut Superieur
 d'agriculture et de gestion d'Obala, l'institut Superieur d'agriculture"/>
@@ -55,6 +57,7 @@ d'agriculture et de gestion d'Obala, l'institut Superieur d'agriculture"/>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:id="@+id/post_view"
         android:background="@color/teal_200"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"

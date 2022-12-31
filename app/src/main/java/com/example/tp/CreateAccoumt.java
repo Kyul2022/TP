@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,6 +38,7 @@ public class CreateAccoumt extends AppCompatActivity {
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final int RC_IMAGE_PERMS = 100;
     private Uri uriImageSelected;
+    private FirebaseAuth auth;
     private static final int RC_CHOOSE_PHOTO = 200;
     EditText pseudo, mail, pwd=null;
     String ps, email,password;
@@ -52,6 +55,7 @@ public class CreateAccoumt extends AppCompatActivity {
         pwd=findViewById(R.id.pwd);
         ok=findViewById(R.id.ok);
         load=findViewById(R.id.load);
+        auth= FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +72,9 @@ public class CreateAccoumt extends AppCompatActivity {
                 } else {
                     // calling method to add data to Firebase Firestore.
                     addDataToFirestore(ps, email);
-                    uploadImage();
+                   // uploadImage();
+                    Intent i= new Intent(getApplicationContext(),Menu.class);
+                    startActivity(i);
                 }
 
             }
@@ -193,6 +199,21 @@ public class CreateAccoumt extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         this.handleResponse(requestCode, resultCode, data);
+    }
+
+    //Create a User sur firefire
+    public void createUser(String email, String pwd){
+        auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Toast.makeText(getApplicationContext(),"User successfully created!",Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),"User failed!",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     }
