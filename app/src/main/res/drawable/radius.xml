@@ -9,8 +9,8 @@
         android:color="#E1E8E4"/>
     <padding
         android:left="20dp"
-        android:top="20dp"
-        android:bottom="20dp"
+        android:top="10dp"
+        android:bottom="10dp"
         />
 
 </shape>

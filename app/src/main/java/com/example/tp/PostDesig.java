@@ -38,7 +38,7 @@ public class PostDesig extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        return 2;
+        return text.length;
     }
 
     @Override

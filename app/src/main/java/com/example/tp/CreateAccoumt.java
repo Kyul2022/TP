@@ -11,12 +11,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -29,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -42,7 +46,7 @@ public class CreateAccoumt extends AppCompatActivity {
     private static final int RC_CHOOSE_PHOTO = 200;
     EditText pseudo, mail, pwd=null;
     String ps, email,password;
-    Button ok=null;
+    Button google, ok=null;
     TextView load=null;
     private FirebaseFirestore db;
     @SuppressLint("MissingInflatedId")
@@ -54,6 +58,7 @@ public class CreateAccoumt extends AppCompatActivity {
         mail=findViewById(R.id.mail);
         pwd=findViewById(R.id.pwd);
         ok=findViewById(R.id.ok);
+        google=findViewById(R.id.google);
         load=findViewById(R.id.load);
         auth= FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -71,47 +76,65 @@ public class CreateAccoumt extends AppCompatActivity {
                     pwd.setError("Please enter Course Duration");
                 } else {
                     // calling method to add data to Firebase Firestore.
-                    addDataToFirestore(ps, email);
-                   // uploadImage();
-                    Intent i= new Intent(getApplicationContext(),Menu.class);
-                    startActivity(i);
+                    addDataToFirestore(ps, email, password);
                 }
 
+            }
+        });
+        google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startSignInActivity();
             }
         });
         load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addFile();
+                uploadImage();
             }
         });
     }
 
-    private void addDataToFirestore(String ps, String email) {
+    private void addDataToFirestore(String ps, String email, String password) {
 
         // creating a collection reference
         // for our Firebase Firestore database.
-        CollectionReference dbUsers = db.collection("Users");
+        CollectionReference dbUsers = db.collection("users");
 
         // adding our data to our courses object class.
-        User user = new User(email, ps, null);
-
-        // below method is use to add data to Firebase Firestore.
-        dbUsers.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        user user = new user(ps, email);
+        auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
-                // after the data addition is successful
-                // we are displaying a success toast message.
-                Toast.makeText(getApplicationContext(), "This user has been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
+            public void onSuccess(AuthResult authResult) {
+                Toast.makeText(getApplicationContext(), "This user has been added to Firebase Auth", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                // this method is called when the data addition process is failed.
-                // displaying a toast message when data addition is failed.
-                Toast.makeText(getApplicationContext(), "Fail to add user \n" + e, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Failed to add user Auth", Toast.LENGTH_SHORT).show();
+                Log.d("Failed with fireAuth",e.getMessage());
             }
         });
+        if(auth.getCurrentUser()!= null){
+            dbUsers.document(auth.getCurrentUser().getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Toast.makeText(getApplicationContext(), "This user has been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(),"Failed to add user Firestore", Toast.LENGTH_SHORT).show();
+                    Log.d("Failed with firestore",e.getMessage());
+                }
+            });
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Eeeeh ....", Toast.LENGTH_SHORT).show();
+        }
+
+        // below method is use to add data to Firebase Firestore.
     }
 
     // UploadImage method
@@ -168,6 +191,45 @@ public class CreateAccoumt extends AppCompatActivity {
         }
     }
 
+    private void startSignInActivity(){
+
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers =
+                Arrays.asList(
+                        new AuthUI.IdpConfig.GoogleBuilder().build() );
+
+        // Launch the activity
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setTheme(R.style.LoginTheme)
+                        .setAvailableProviders(providers)
+                        .setIsSmartLockEnabled(true, true)
+                        .build(),
+                200);
+
+        CollectionReference  dbUsers=FirebaseFirestore.getInstance().collection("users");
+        if(auth.getCurrentUser()!= null){
+            user user = new user(auth.getCurrentUser().getDisplayName().toString(), auth.getCurrentUser().getEmail().toString());
+            dbUsers.document(auth.getCurrentUser().getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Toast.makeText(getApplicationContext(), "This user has been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(),"Failed to add user Firestore", Toast.LENGTH_SHORT).show();
+                    Log.d("Failed with firestore",e.getMessage());
+                }
+            });
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Eeeeh ....", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
 
         @Override
         public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

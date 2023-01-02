@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"
         android:text="Se connecter"
         android:textStyle="bold"
         android:textSize="28sp"/>
@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="20dp"
-        android:text="Pseudo"
         android:textStyle="bold"
         android:textSize="18sp"/>
     <EditText
@@ -30,6 +29,7 @@
         android:layout_marginStart="40dp"
         android:paddingEnd="10dp"
         android:layout_marginBottom="30dp"
+        android:id="@+id/Pseudo"
         android:background="@drawable/radius"
         />
 
@@ -45,6 +45,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="Type somethig"
+        android:id="@+id/pwd"
         android:layout_marginStart="40dp"
         android:background="@drawable/radius"
         android:paddingEnd="10dp"
@@ -56,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginStart="40dp"
+        android:id="@+id/log"
         android:text="Se connecter "/>
     <TextView
         android:layout_width="wrap_content"
@@ -96,6 +98,7 @@
         android:background="@drawable/radius"
         android:layout_marginTop="20dp"
         android:layout_marginStart="40dp"
+        android:id="@+id/google"
         android:textColor="@color/black"
         android:text="Continuer avec Google "/>
     <LinearLayout
