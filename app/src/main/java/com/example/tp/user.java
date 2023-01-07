@@ -38,5 +38,10 @@ public class user {
         this.pseudo=pseudo;
         this.email=email;
     }
+    public user(String pseudo, String email,Uri profilepicture){
+        this.pseudo=pseudo;
+        this.email=email;
+        this.profilepricture = profilepicture;
+    }
 
 }

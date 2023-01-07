@@ -1,5 +1,6 @@
 package com.example.tp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -9,9 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -31,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     TextView create;
     FirebaseUser user;
-    String email;
+    String email=null;
     private static final int RC_SIGN_IN=100;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String ps= pseudo.getText().toString();
+                Toast.makeText(getApplicationContext(),"heey",Toast.LENGTH_LONG).show();
                 String passwd= pwd.getText().toString();
                 CollectionReference users= FirebaseFirestore.getInstance().collection("users");
                 users.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -57,14 +62,26 @@ public class MainActivity extends AppCompatActivity {
                             String pseud = (String) doc.get("pseudo");
                             if(pseud.equals(ps)){
                                 email= (String) doc.get("email");
+                                break;
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(),"RAS1",Toast.LENGTH_LONG).show();
                             }
                         }
-                        mAuth.signInWithEmailAndPassword(email, passwd);
-                        if (user!= null){
-                            Intent i = new Intent(getApplicationContext(), infosup.class);
-                            i.putExtra("pseudo", ps);
-                            startActivity(i);
-                        }
+                        if(email!= null){
+                        mAuth.signInWithEmailAndPassword(email, passwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                Intent i = new Intent(getApplicationContext(), Menu.class);
+                                i.putExtra("pseudo", ps);
+                                startActivity(i);
+                            }
+                        });}
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -76,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
              startSignInActivity();
              user = mAuth.getCurrentUser();
              if (user!= null){
-                 Intent i = new Intent(getApplicationContext(), infosup.class);
+                 Intent i = new Intent(getApplicationContext(), Menu.class);
                  startActivity(i);
              }
             }

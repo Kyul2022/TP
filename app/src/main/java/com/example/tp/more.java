@@ -4,15 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,37 +31,60 @@ import java.util.UUID;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class infosup extends AppCompatActivity {
-    EditText text;
-    Button tof, semd;
+public class more extends AppCompatActivity {
+    EditText pseudo;
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
+    ImageButton img;
+    TextView skip;
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
-    private static final int RC_IMAGE_PERMS = 100;
-    private static final int RC_CHOOSE_PHOTO = 200;
+    Button valider, ok;
     private Uri uriImageSelected;
     private String uriUpload = "s";
-
+    static final int RC_IMAGE_PERMS = 100;
+    Uri filePath;
+    String ps;
+    String email;
+    static final  int RC_CHOOSE_PHOTO = 200;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_infosup);
-        text=findViewById(R.id.text);
-        tof=findViewById(R.id.tof);
-        semd=findViewById(R.id.semd);
-        tof.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_more);
+        pseudo = findViewById(R.id.pseudo);
+        img = findViewById(R.id.load);
+        ps = getIntent().getStringExtra("pseudo");
+        auth= FirebaseAuth.getInstance();
+        email = getIntent().getStringExtra("email");
+        db = FirebaseFirestore.getInstance();
+        skip = findViewById(R.id.skip);
+        valider = findViewById(R.id.valider);
+        ok = findViewById(R.id.ok);
+        ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addFile();
+                Intent i = new Intent(getApplicationContext(), Menu.class);
+                startActivity(i);
             }
         });
-        semd.setOnClickListener(new View.OnClickListener() {
+        valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 uploadImage();
-                String texte= text.getText().toString();
-                String usr= FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                Toast.makeText(getApplicationContext(), "salut "+usr, Toast.LENGTH_SHORT).show();
-                post P = new post(texte, usr, uriUpload);
-                Post(P);
+                CollectionReference dbUsers = db.collection("users");
+                user U = new user(ps,email,Uri.parse(uriUpload));
+                    dbUsers.document(auth.getUid()).set(U).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(getApplicationContext(),"Resulted",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+        });
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addFile();
             }
         });
     }
@@ -100,20 +125,21 @@ public class infosup extends AppCompatActivity {
     ////////
 
     private void uploadImage() {
-        Uri filePath =  this.uriImageSelected;
+        filePath = this.uriImageSelected;
         if (filePath != null) {
 
             // Code for showing progressDialog while uploading
             ProgressDialog progressDialog
                     = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
             progressDialog.show();
             this.uriUpload = UUID.randomUUID().toString();
             // Defining the child of storageReference
             StorageReference ref
                     = FirebaseStorage.getInstance().getReference()
                     .child(
-                            "posts/"+this.uriUpload );
+                            "pp/" + this.uriUpload);
             Toast.makeText(getApplicationContext(), "Wait...", Toast.LENGTH_LONG).show();
             // adding listeners on upload
             // or failure of image
@@ -131,21 +157,5 @@ public class infosup extends AppCompatActivity {
                 }
             });
         }
-
-        }
-        public void Post(post poste){
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        CollectionReference ref = FirebaseFirestore.getInstance().collection("posts");
-        ref.document(UUID.randomUUID().toString()).set(poste).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Post succeeded!!", Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Post failed!!", Toast.LENGTH_LONG).show();
-            }
-        });
-        }
+    }
 }

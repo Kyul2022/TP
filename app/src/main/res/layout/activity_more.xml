@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:text="Infos supplementaires"
+        android:textStyle="bold"
+        android:textSize="28sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold"
+        android:text="Ajouter un pseudo"
+        android:textSize="18sp"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Type somethig"
+        android:layout_marginStart="40dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="30dp"
+        android:id="@+id/pseudo"
+        android:background="@drawable/radius"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="20dp"
+        android:text="Ajouter une photo de profil"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+   <ImageButton
+       android:layout_width="150dp"
+       android:layout_height="150dp"
+       android:background="@drawable/cirriculum"
+       android:layout_gravity="center"
+       android:scaleType="centerCrop"
+       android:id="@+id/load"
+       android:src="@drawable/people"/>
+    <Button
+        android:background="@drawable/radius"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
+        android:id="@+id/valider"
+        android:textSize="18sp"
+        android:text="Valider "/>
+    <Button
+        android:background="@drawable/radius"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
+        android:id="@+id/ok"
+        android:textSize="18sp"
+        android:text="Ok"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="250dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:text="Plus tard >"
+            android:textStyle="bold"
+            android:id="@+id/skip"
+            android:textColor="#706CFA"
+            android:textSize="22sp"/>
+    </LinearLayout>
+</LinearLayout>

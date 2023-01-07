@@ -39,11 +39,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class CreateAccoumt extends AppCompatActivity {
-    private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
-    private static final int RC_IMAGE_PERMS = 100;
-    private Uri uriImageSelected;
     private FirebaseAuth auth;
-    private static final int RC_CHOOSE_PHOTO = 200;
     EditText pseudo, mail, pwd=null;
     String ps, email,password;
     Button google, ok=null;
@@ -90,8 +86,7 @@ public class CreateAccoumt extends AppCompatActivity {
         load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addFile();
-                uploadImage();
+               //
             }
         });
     }
@@ -117,19 +112,11 @@ public class CreateAccoumt extends AppCompatActivity {
             }
         });
         if(auth.getCurrentUser()!= null){
-            dbUsers.document(auth.getCurrentUser().getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Toast.makeText(getApplicationContext(), "This user has been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(), more.class);
+                    i.putExtra("pseudo", ps);
+                    i.putExtra("email", email);
+                    startActivity(i);
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(),"Failed to add user Firestore", Toast.LENGTH_SHORT).show();
-                    Log.d("Failed with firestore",e.getMessage());
-                }
-            });
-        }
         else{
             Toast.makeText(getApplicationContext(), "Eeeeh ....", Toast.LENGTH_SHORT).show();
         }
@@ -138,58 +125,7 @@ public class CreateAccoumt extends AppCompatActivity {
     }
 
     // UploadImage method
-    private void uploadImage() {
-        Uri filePath =  this.uriImageSelected;
-        if (filePath != null) {
 
-            // Code for showing progressDialog while uploading
-            ProgressDialog progressDialog
-                    = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            // Defining the child of storageReference
-            StorageReference ref
-                    = FirebaseStorage.getInstance().getReference()
-                    .child(
-                            "images/"
-                                    + UUID.randomUUID().toString());
-
-            // adding listeners on upload
-            // or failure of image
-            ref.putFile(filePath)
-                    .addOnSuccessListener(
-                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                                @Override
-                                public void onSuccess(
-                                        UploadTask.TaskSnapshot taskSnapshot) {
-
-                                    // Image uploaded successfully
-                                    // Dismiss dialog
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(),
-                                                    "Image Uploaded!!",
-                                                    Toast.LENGTH_SHORT).show();
-                                }
-                            })
-
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                            // Error, Image not uploaded
-                            progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(),
-                                            "Failed " + e.getMessage(),
-                                            Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    });
-
-
-        }
-    }
 
     private void startSignInActivity(){
 
@@ -210,11 +146,14 @@ public class CreateAccoumt extends AppCompatActivity {
 
         CollectionReference  dbUsers=FirebaseFirestore.getInstance().collection("users");
         if(auth.getCurrentUser()!= null){
-            user user = new user(auth.getCurrentUser().getDisplayName().toString(), auth.getCurrentUser().getEmail().toString());
+            user user = new user(auth.getCurrentUser().getDisplayName().toString().trim(), auth.getCurrentUser().getEmail().toString());
             dbUsers.document(auth.getCurrentUser().getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
                     Toast.makeText(getApplicationContext(), "This user has been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    i.putExtra("pseudo", ps);
+                    startActivity(i);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -231,37 +170,7 @@ public class CreateAccoumt extends AppCompatActivity {
 
     }
 
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-        }
 
-        @AfterPermissionGranted(RC_IMAGE_PERMS)
-        private void addFile(){
-            if (!EasyPermissions.hasPermissions(this, PERMS)) {
-                EasyPermissions.requestPermissions(this, "Acceder a la galerie", RC_IMAGE_PERMS, PERMS);
-                return;
-            }
-            Toast.makeText(this, "Vous avez le droit d'accéder aux images !", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, RC_CHOOSE_PHOTO);
-        }
-
-    private void handleResponse(int requestCode, int resultCode, Intent data){
-        if (requestCode == RC_CHOOSE_PHOTO) {
-            if (resultCode == RESULT_OK) { //SUCCESS
-                this.uriImageSelected = data.getData();
-            } else {
-                Toast.makeText(this, "pas marche", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        this.handleResponse(requestCode, resultCode, data);
-    }
 
     //Create a User sur firefire
     public void createUser(String email, String pwd){

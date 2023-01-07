@@ -4,12 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +17,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -29,42 +26,32 @@ import java.util.UUID;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class infosup extends AppCompatActivity {
-    EditText text;
-    Button tof, semd;
-    private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
+public class Add extends AppCompatActivity {
     private static final int RC_IMAGE_PERMS = 100;
+    private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final int RC_CHOOSE_PHOTO = 200;
+    EditText text;
     private Uri uriImageSelected;
+    Button tof,semd;
     private String uriUpload = "s";
-
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_infosup);
+        setContentView(R.layout.activity_add);
         text=findViewById(R.id.text);
         tof=findViewById(R.id.tof);
         semd=findViewById(R.id.semd);
+
         tof.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addFile();
             }
         });
-        semd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uploadImage();
-                String texte= text.getText().toString();
-                String usr= FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                Toast.makeText(getApplicationContext(), "salut "+usr, Toast.LENGTH_SHORT).show();
-                post P = new post(texte, usr, uriUpload);
-                Post(P);
-            }
-        });
+
     }
 
-    //////////
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -96,11 +83,9 @@ public class infosup extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         this.handleResponse(requestCode, resultCode, data);
     }
-
-    ////////
-
+    //
     private void uploadImage() {
-        Uri filePath =  this.uriImageSelected;
+        Uri filePath = this.uriImageSelected;
         if (filePath != null) {
 
             // Code for showing progressDialog while uploading
@@ -113,7 +98,7 @@ public class infosup extends AppCompatActivity {
             StorageReference ref
                     = FirebaseStorage.getInstance().getReference()
                     .child(
-                            "posts/"+this.uriUpload );
+                            "posts/" + this.uriUpload);
             Toast.makeText(getApplicationContext(), "Wait...", Toast.LENGTH_LONG).show();
             // adding listeners on upload
             // or failure of image
@@ -131,21 +116,5 @@ public class infosup extends AppCompatActivity {
                 }
             });
         }
-
-        }
-        public void Post(post poste){
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        CollectionReference ref = FirebaseFirestore.getInstance().collection("posts");
-        ref.document(UUID.randomUUID().toString()).set(poste).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Post succeeded!!", Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Post failed!!", Toast.LENGTH_LONG).show();
-            }
-        });
-        }
-}
+    }
+    }
